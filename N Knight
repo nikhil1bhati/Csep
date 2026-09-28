@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+int n;
+int board[20][20];
+
+bool safe(int row, int col)
+{
+    int x[8] = {-2, -2, -1, -1, 1, 1, 2, 2};
+    int y[8] = {-1, 1, -2, 2, -2, 2, -1, 1};
+
+    for(int i = 0; i < 8; i++)
+    {
+        int r = row + x[i];
+        int c = col + y[i];
+
+        if(r >= 0 && r < n && c >= 0 && c < n)
+        {
+            if(board[r][c] == 1)
+                return false;
+        }
+    }
+
+    return true;
+}
+
+void printBoard()
+{
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if(board[i][j] == 1)
+                cout << "K ";
+            else
+                cout << ". ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void solve(int row, int col, int count)
+{
+    if(count == n)
+    {
+        printBoard();
+        return;
+    }
+
+    if(row == n)
+        return;
+
+    if(col == n)
+    {
+        solve(row + 1, 0, count);
+        return;
+    }
+
+    if(safe(row, col))
+    {
+        board[row][col] = 1;
+        solve(row, col + 1, count + 1);
+        board[row][col] = 0;
+    }
+
+    solve(row, col + 1, count);
+}
+
+int main()
+{
+    cin >> n;
+
+    solve(0, 0, 0);
+
+    return 0;
+}
